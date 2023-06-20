@@ -12,14 +12,20 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Landmark.belongsTo(models.Image, {
-        foreignKey: "image_id"
+        foreignKey: "image_id",
+        as: "image"
       });
       Landmark.belongsTo(models.Location, {
-        foreignKey: "location_id"
+        foreignKey: "location_id",
+        as: 'location'
       })
       Landmark.hasMany(models.Search, {
         foreignKey: "landmark_id", 
         sourceKey: "id"
+      })
+      Landmark.hasMany(models.Favorite,{
+        foreignKey: 'landmark_id',
+        as: 'favorites'
       })
     }
   }

@@ -17,7 +17,8 @@ module.exports = (sequelize, DataTypes) => {
       });
       Search.belongsTo(models.Landmark, {
         foreignKey: "landmark_id",
-        targetKey: "id"
+        targetKey: "id",
+        as: 'landmarks'
       })
     }
   }

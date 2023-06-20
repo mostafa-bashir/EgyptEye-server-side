@@ -11,6 +11,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // APIs file
 const authRoutes = require('./APIs/Auth');
 const adminRoutes = require('./APIs/Admin');
+const searchRoutes = require('./APIs/Search');
+const profileRoutes = require('./APIs/Profile');
+const favoriteRoutes = require('./APIs/Favorite');
 
 
 
@@ -20,6 +23,10 @@ app.get("/", (req, res)=>{
 
 app.use("/auth", authRoutes);
 app.use('/admin', adminRoutes);
+app.use('/search', searchRoutes);
+app.use('/profile', profileRoutes);
+app.use('/favorite', favoriteRoutes);
+
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)

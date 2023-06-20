@@ -6,7 +6,8 @@ const {Landmark, Location, Image} = require('../models');
 const jwt = require("../services/jwt");
 const {authenticateAdmin} = require('../services/authenticate')
 
-const upload = require('../services/multer');
+const createUploadMiddleware = require('../services/multer');
+const upload = createUploadMiddleware('uploads');
 
 router.post('/addLandmark',authenticateAdmin ,upload.single('image'), async(req, res)=>{
 
@@ -38,6 +39,17 @@ router.post('/addLandmark',authenticateAdmin ,upload.single('image'), async(req,
         }
     }catch{
         res.status(500).json({error: "error"})
+    }
+})
+
+router.get('/getlandmarks', authenticateAdmin, async(req,res) => {
+    try{
+        const landmarks = await Landmark.findAll({
+        include: ['image', 'location']
+       }); 
+        res.status(200).json(landmarks);
+    }catch{
+        res.status(500).json({message: "something went wrong"});
     }
 })
 
