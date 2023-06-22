@@ -6,6 +6,10 @@ const {authenticateUser} = require('../services/authenticate');
 const { Op } = require('sequelize');
 const createUploadMiddleware = require('../services/multer');
 const upload = createUploadMiddleware('searchesImages');
+const { PythonShell } = require('python-shell');
+const path = require('path');
+const projectDir = process.cwd();
+
 
 router.get('/landmark', authenticateUser, async(req,res)=>{
     
@@ -54,9 +58,24 @@ router.get('/getlandmark', authenticateUser, async(req, res)=>{
 })
 
 router.get('/getlandmark/image', authenticateUser, upload.single('image'), async(req,res)=>{
-    res.send(req.file.path);
-    // Logic of integration with the model should be here
-    // Then need to add histroy as the upper endpoint
+    
+let pyshell = new PythonShell('D:\\Graduation project\\Dataset\\Script.py');
+
+    // sends a message to the Python script via stdin
+    pyshell.send(path.join(projectDir, req.file.path));
+
+    pyshell.on('message', function (message) {
+    // received a message sent from the Python script (a simple "print" statement)
+    res.json({result: message})
+    });
+
+    // end the input stream and allow the process to exit
+    pyshell.end(function (err,code,signal) {
+    if (err) throw err;
+    console.log('The exit code was: ' + code);
+    console.log('The exit signal was: ' + signal);
+    console.log('finished');
+    });
 })
 
 router.get('/gethistory', authenticateUser, async(req,res)=>{
